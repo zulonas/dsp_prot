@@ -1,1 +1,1 @@
-# Various prototypes and hacks for diginal signal processing
+## Various Prototypes and Hacks for Digital Signal Processing (DSP)
