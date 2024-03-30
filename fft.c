@@ -32,8 +32,7 @@ int fft(const double input_re[], double output_re[], double output_im[], const u
 	if (!input_re || !output_re || !output_im || N < 1 || N & (N - 1))
 		return 0;
 
-	for (unsigned int position = 0; position < N; ++position)
-	{
+	for (unsigned int position = 0; position < N; ++position) {
 		output_re[target] = input_re[position];
 		output_im[target] = 0;
 		mask = N;
@@ -42,8 +41,7 @@ int fft(const double input_re[], double output_re[], double output_im[], const u
 		target |= mask;
 	}
 
-	for (unsigned int step = 1; step < N; step <<= 1)
-	{
+	for (unsigned int step = 1; step < N; step <<= 1) {
 		jump = step << 1;
 		delta = M_PI / (double)step;
 		sine = sin(delta * .5);
@@ -52,10 +50,8 @@ int fft(const double input_re[], double output_re[], double output_im[], const u
 		factor_re = 1.;
 		factor_im = 0.;
 
-		for (unsigned int group = 0; group < step; ++group)
-		{
-			for (unsigned int pair = group; pair < N; pair += jump)
-			{
+		for (unsigned int group = 0; group < step; ++group) {
+			for (unsigned int pair = group; pair < N; pair += jump) {
 				match = pair + step;
 				product_re = factor_re * output_re[match] - factor_im * output_im[match];
 				product_im = factor_re * output_im[match] + factor_im * output_re[match];
@@ -74,25 +70,25 @@ int fft(const double input_re[], double output_re[], double output_im[], const u
 }
 
 int main() {
-    double Input[SAMPLES_QTY];
-    double complexoutput_re[SAMPLES_QTY];
-    double complexoutput_im[SAMPLES_QTY];
+	double Input[SAMPLES_QTY];
+	double complexoutput_re[SAMPLES_QTY];
+	double complexoutput_im[SAMPLES_QTY];
 
-    for (int index = 0; index < SAMPLES_QTY; index++) {
-        Input[index] = 1000 * sin(1000 * 2 * M_PI * index / SAMPLING_FREQ) +
-                       1000 * sin(3000 * 2 * M_PI * index / SAMPLING_FREQ);
-    }
+	for (int index = 0; index < SAMPLES_QTY; index++) {
+		Input[index] = 1000 * sin(1000 * 2 * M_PI * index / SAMPLING_FREQ) +
+			       1000 * sin(3000 * 2 * M_PI * index / SAMPLING_FREQ);
+	}
 
-    if (!fft(Input, complexoutput_re, complexoutput_im, SAMPLES_QTY)) {
-        fprintf(stderr, "FFT computation failed.\n");
-        return 1;
-    }
+	if (!fft(Input, complexoutput_re, complexoutput_im, SAMPLES_QTY)) {
+		fprintf(stderr, "FFT computation failed.\n");
+		return 1;
+	}
 
-    for (int i = 0; i < SAMPLES_QTY / 2; i++) {
-        double magnitude = sqrt(complexoutput_re[i] * complexoutput_re[i] +
-                                complexoutput_im[i] * complexoutput_im[i]);
-        printf("Frequency %d Hz: Magnitude = %f\n", i * SAMPLING_FREQ / SAMPLES_QTY, magnitude);
-    }
+	for (int i = 0; i < SAMPLES_QTY / 2; i++) {
+		double magnitude = sqrt(complexoutput_re[i] * complexoutput_re[i] +
+					complexoutput_im[i] * complexoutput_im[i]);
+		printf("Frequency %d Hz: Magnitude = %f\n", i * SAMPLING_FREQ / SAMPLES_QTY, magnitude);
+	}
 
-    return 0;
+	return 0;
 }
